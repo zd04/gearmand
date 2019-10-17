@@ -8,7 +8,8 @@ import (
 	"encoding/json"
 	"flag"
 	log "github.com/ngaut/logging"
-	redis "github.com/vmihailenco/redis/v2"
+	//redis "github.com/vmihailenco/redis/v2"
+	redis "github.com/go-redis/redis/v7"
 )
 
 type RedisQ struct {
