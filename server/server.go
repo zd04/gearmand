@@ -93,6 +93,9 @@ func (self *Server) Start(addr string) {
 	}
 }
 
+/**
+* 添加worker链接的
+**/
 func (self *Server) addWorker(l *list.List, w *Worker) {
 	for it := l.Front(); it != nil; it = it.Next() {
 		if it.Value.(*Worker).SessionId == w.SessionId {

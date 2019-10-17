@@ -10,6 +10,7 @@ import (
 	log "github.com/ngaut/logging"
 	//redis "github.com/vmihailenco/redis/v2"
 	redis "github.com/go-redis/redis/v7"
+	"time"
 )
 
 type RedisQ struct {
@@ -19,7 +20,7 @@ type RedisQ struct {
 func (self *RedisQ) Init() error {
 	log.Debug("init redis queue")
 	addr := flag.Lookup("redis").Value.(flag.Getter).Get().(string)
-	self.client = redis.NewTCPClient(&redis.Options{
+	self.client = redis.NewClient(&redis.Options{
 		Addr:     addr,
 		Password: "", // no password set
 		DB:       0,  // use default DB
@@ -36,7 +37,7 @@ func (self *RedisQ) AddJob(j *Job) error {
 		return err
 	}
 
-	_, err = self.client.Set(j.Handle, string(buf)).Result()
+	_, err = self.client.Set(j.Handle, string(buf), 10 * time.Second).Result()
 
 	return err
 }
