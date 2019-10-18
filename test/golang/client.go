@@ -13,7 +13,7 @@ func main() {
 	// by implementing IdGenerator interface.
 	// client.IdGen = client.NewAutoIncId()
 
-	c, err := client.New(client.Network, "192.168.100.211:4730")
+	c, err := client.New(client.Network, "192.168.100.185:4730")
 	if err != nil {
 		log.Fatalln(err)
 	}

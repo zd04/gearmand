@@ -38,6 +38,7 @@ func main() {
 	log.Println("Starting ...")
 	defer log.Println("Shutdown complete!")
 	w := worker.New(worker.Unlimited)
+	w.SetId("555555");
 	defer w.Close()
 	w.ErrorHandler = func(e error) {
 		log.Println(e)
@@ -57,7 +58,7 @@ func main() {
 		log.Printf("Data=%s\n", job.Data())
 		return nil
 	}
-	w.AddServer("tcp4", "192.168.100.211:4730")
+	w.AddServer("tcp4", "192.168.100.185:4730")
 	w.AddFunc("Foobar", Foobar, worker.Unlimited)
 	w.AddFunc("ToUpper", ToUpper, worker.Unlimited)
 	w.AddFunc("ToUpperTimeOut5", ToUpperDelay10, 5)
