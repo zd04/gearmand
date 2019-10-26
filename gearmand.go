@@ -20,9 +20,9 @@ var (
 	//todo: read from config files
 	mysqlSource   = flag.String("mysql", "user:password@tcp(localhost:3306)/gogearmand?parseTime=true", "mysql source")
 	sqlite3Source = flag.String("sqlite3", "gearmand.db", "sqlite3 source")
-	storage       = flag.String("storage", "mysql", "choose storage(redis or mysql, sqlite3)")
+	storage       = flag.String("storage", "sqlite3", "choose storage(redis or mysql, sqlite3)")
 
-	//flag.String("v", "", "LogLevel")
+	v = flag.String("v", "", "LogLevel")
 
 )
 
