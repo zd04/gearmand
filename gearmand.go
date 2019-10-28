@@ -4,9 +4,9 @@ import (
 	"flag"
 	"fmt"
 	gearmand "github.com/ngaut/gearmand/server"
-	"github.com/ngaut/gearmand/storage/mysql"
-	"github.com/ngaut/gearmand/storage/redisq"
-	"github.com/ngaut/gearmand/storage/sqlite3"
+	mysql "github.com/ngaut/gearmand/storage/mysql"
+	redisq "github.com/ngaut/gearmand/storage/redisq"
+	sqlite3 "github.com/ngaut/gearmand/storage/sqlite3"
 
 	log "github.com/ngaut/gearmand/logging"
 	"runtime"

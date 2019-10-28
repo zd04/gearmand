@@ -7,6 +7,7 @@ import (
 	"net"
 )
 
+/*worker的状态的*/
 const (
 	wsRunning         = 1
 	wsSleep           = 2
@@ -43,12 +44,15 @@ func (self *Worker) MarshalJSON() ([]byte, error) {
 	m["sessionId"] = self.SessionId
 	m["Id"] = self.workerId
 	m["status"] = status2str(self.status)
+
+	/*worker注册的方法*/
 	canDoSlice := make([]string, 0, len(self.canDo))
 	for k, _ := range self.canDo {
 		canDoSlice = append(canDoSlice, k)
 	}
 	m["canDo"] = canDoSlice
 
+	/*正在处理的任务*/
 	jobSlice := make([]string, 0, len(self.canDo))
 	for k, _ := range self.runningJobs {
 		jobSlice = append(jobSlice, k)

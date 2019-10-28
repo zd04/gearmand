@@ -153,6 +153,7 @@ func (self *Server) doAddJob(j *Job) {
 	self.wakeupWorker(j.FuncName)
 }
 
+/*压入任务的*/
 func (self *Server) popJob(sessionId int64) (j *Job) {
 	for funcName, cando := range self.worker[sessionId].canDo {
 		if !cando {
@@ -424,6 +425,8 @@ func (self *Server) handleProtoEvt(e *event) {
 		w := args.t0.(*Worker)
 		funcName := args.t1.(string)
 		self.handleCanDo(funcName, w)
+
+	/*获取任务的*/
 	case GRAB_JOB_UNIQ:
 		sessionId := e.fromSessionId
 		w, ok := self.worker[sessionId]
@@ -517,6 +520,7 @@ func (self *Server) EvtLoop() {
 	}
 }
 
+/*生成sessionID,全局自动增长的*/
 func (self *Server) allocSessionId() int64 {
 	return atomic.AddInt64(&self.startSessionId, 1)
 }

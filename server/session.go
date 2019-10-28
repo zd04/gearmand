@@ -68,21 +68,26 @@ func (self *session) handleConnection(s *Server, conn net.Conn) {
 		log.Debug("sessionId", sessionId, "tp:", CmdDescription(tp), "len(args):", len(args), "details:", string(buf))
 
 		switch tp {
+		/*注册方法的*/
 		case CAN_DO, CAN_DO_TIMEOUT: //todo: CAN_DO_TIMEOUT timeout support
 			self.w = self.getWorker(sessionId, inbox, conn)
 			s.protoEvtCh <- &event{tp: tp, args: &Tuple{
 				t0: self.w, t1: string(args[0])}}
+		/*删除方法*/
 		case CANT_DO:
 			s.protoEvtCh <- &event{tp: tp, fromSessionId: sessionId,
 				args: &Tuple{t0: string(args[0])}}
 		case ECHO_REQ:
 			sendReply(inbox, ECHO_RES, [][]byte{buf})
+		/*等待任务*/
 		case PRE_SLEEP:
 			self.w = self.getWorker(sessionId, inbox, conn)
 			s.protoEvtCh <- &event{tp: tp, args: &Tuple{t0: self.w}, fromSessionId: sessionId}
+		/*设置标示ID*/
 		case SET_CLIENT_ID:
 			self.w = self.getWorker(sessionId, inbox, conn)
 			s.protoEvtCh <- &event{tp: tp, args: &Tuple{t0: self.w, t1: string(args[0])}}
+		/*获取任务*/
 		case GRAB_JOB_UNIQ:
 			if self.w == nil {
 				log.Errorf("can't perform %s, need send CAN_DO first", CmdDescription(tp))
@@ -101,6 +106,7 @@ func (self *session) handleConnection(s *Server, conn net.Conn) {
 			//log.Debugf("%+v", job)
 			sendReply(inbox, JOB_ASSIGN_UNIQ, [][]byte{
 				[]byte(job.Handle), []byte(job.FuncName), []byte(job.Id), job.Data})
+		/*提交一个任务的*/
 		case SUBMIT_JOB, SUBMIT_JOB_LOW_BG, SUBMIT_JOB_LOW:
 			if self.c == nil {
 				self.c = &Client{Session: Session{SessionId: sessionId, in: inbox,
@@ -113,6 +119,7 @@ func (self *session) handleConnection(s *Server, conn net.Conn) {
 			s.protoEvtCh <- e
 			handle := <-e.result
 			sendReply(inbox, JOB_CREATED, [][]byte{[]byte(handle.(string))})
+		/*查询状态的*/
 		case GET_STATUS:
 			e := &event{tp: tp, args: &Tuple{t0: args[0]},
 				result: createResCh()}
@@ -123,6 +130,7 @@ func (self *session) handleConnection(s *Server, conn net.Conn) {
 				bool2bytes(resp.t1), bool2bytes(resp.t2),
 				int2bytes(resp.t3),
 				int2bytes(resp.t4)})
+		/*worker的处理的数据*/
 		case WORK_DATA, WORK_WARNING, WORK_STATUS, WORK_COMPLETE,
 			WORK_FAIL, WORK_EXCEPTION:
 			if self.w == nil {
