@@ -1,2 +1,8 @@
 /vendor/
 /test/nodejs/node_modules/
+/--crash.log
+/gearmand
+/gearmand.db
+/gearmand.exe
+/test/golang/client.exe
+/test/golang/worker.exe
